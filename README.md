@@ -1,10 +1,10 @@
 # MERN Stack Activity Manager Study App
 
-    With this project I intend on building a simple management app, where the user will be able to manage activities with a dashboard and have a activity display page.
+With this project I intend on building a simple management app, where the user will be able to manage activities with a dashboard and have an activity display page.
 
 ## Current State
 
-Simple list to keep track of progress
+A simple list to keep track of progress:
 
 ### Done
 
@@ -15,6 +15,7 @@ Simple list to keep track of progress
 #### Server
 
 - Boilerplate
+- Simple working API for basic user CRUD
 
 ### To do
 
@@ -24,7 +25,7 @@ Simple list to keep track of progress
 
 #### Server
 
-- API for user CRUD
+-
 
 ## Tech Stack
 

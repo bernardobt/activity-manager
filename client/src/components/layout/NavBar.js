@@ -6,13 +6,13 @@ const NavBar = () => {
   return (
     <Navbar bg="primary" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Tracker</Navbar.Brand>
+        <Navbar.Brand href="/">Activities</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/display">Home</Nav.Link>
             <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-            <Nav.Link href="/auth">Auth</Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
