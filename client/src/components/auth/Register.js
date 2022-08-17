@@ -1,43 +1,78 @@
 import Input from "../layout/FormInput";
 import React, { useState, useRef, useEffect } from "react";
+import Button from "react-bootstrap/esm/Button";
 
+const EMAIL_REGEX = /.*\@[a-zA-Z0-9-_]*\.[a-zA-Z]{3}/;
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-const Register = ({ setEmail, setUser, setPassword, setMatchPassword }) => {
-  // // Reference for focusing on username when the component loads
-  // const userRef = useRef();
-  // // Reference to error message for acessibility
-  // const errRef = useRef();
+const Register = ({
+  email,
+  setEmail,
+  validEmail,
+  setValidEmail,
+  user,
+  setUser,
+  validName,
+  setValidName,
+  password,
+  setPassword,
+  validPassword,
+  setValidPassword,
+  matchPassword,
+  setMatchPassword,
+  validMatch,
+  setValidMatch,
+}) => {
+  const [emailFocus, setEmailFocus] = useState(false);
+  const [userFocus, setUserFocus] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [matchFocus, setMatchFocus] = useState(false);
 
-  // // State for error on register
-  // const [errMessage, setErrMessage] = useState("");
-  // const [sucess, setSucess] = useState(false);
+  // validade email
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(email);
+    setValidEmail(result);
+  }, [email]);
+  // validade username
+  useEffect(() => {
+    const result = USER_REGEX.test(user);
+    setValidName(result);
+  }, [user]);
 
-  // // set focus on user field
-  // useEffect(() => {
-  //   userRef.current.focus();
-  // }, []);
+  // validade password
+  useEffect(() => {
+    const result = PASSWORD_REGEX.test(password);
+    setValidPassword(result);
+    // const match = password === matchPassword;
+    const match = password === matchPassword;
+    setValidMatch(match);
+  }, [password, matchPassword]);
 
-  // // clear error message
-  // useEffect(() => {
-  //   setErrMessage("");
-  // }, [user, password, matchPassword]);
+  const handleOnRegister = async (e) => {
+    e.preventDefault();
+    console.log("clicked Register");
+    console.log("email: ", email);
+    console.log("user: ", user);
+    console.log("password: ", password);
+    console.log("matchPassword: ", matchPassword);
+  };
 
+  const emailFieldNote = <>Not a valid email.</>;
   const userNameFieldNote = (
     <>
-      4 to 24 characters {<br />}
-      Must begin with a letter {<br />}
-      Letters, numbers, underscores, hyphens allowed
+      4 to 24 characters. {<br />}
+      Must begin with a letter. {<br />}
+      Letters, numbers, underscores, hyphens allowed.
     </>
   );
   const passwordFieldNote = (
     <>
-      8 to 24 characters {<br />}
+      8 to 24 characters. {<br />}
       Must include uppercase and lowercase, letters, number and special
-      character {<br />}
-      Allowed special characters: {<br />}! @ # $ %
+      character. {<br />}
+      Allowed special characters: ! @ # $ %
     </>
   );
 
@@ -50,40 +85,61 @@ const Register = ({ setEmail, setUser, setPassword, setMatchPassword }) => {
           label="Email"
           fieldPlaceholder={"Enter e-mail adress"}
           type="email"
-          textClass="text-muted"
+          isValid={validEmail}
+          isInvalid={email && !validEmail}
           isRequired={true}
           controlId="registerEmailInput"
+          fieldNote={emailFieldNote}
           stateToChange={(e) => setEmail(e.target.value)}
+          autoComplete={"off"}
+          showNote={emailFocus && !validEmail ? true : false}
+          onFocus={() => setEmailFocus(true)}
+          onBlur={() => setEmailFocus(false)}
         />
         <Input
           label="Username"
           fieldPlaceholder={"Enter username"}
           type="string"
-          textClass="text-muted"
+          isValid={validName}
+          isInvalid={user && !validName}
           isRequired={true}
           controlId="registerUsernameInput"
           fieldNote={userNameFieldNote}
           stateToChange={(e) => setUser(e.target.value)}
+          autoComplete={"off"}
+          showNote={userFocus && !validName ? true : false}
+          onFocus={() => setUserFocus(true)}
+          onBlur={() => setUserFocus(false)}
         />
         <Input
           label="Password"
           fieldPlaceholder={"Enter password"}
           type="password"
-          textClass="text-muted"
+          isValid={validPassword}
+          isInvalid={password && !validPassword}
           isRequired={true}
           controlId="registerPasswordInput"
           fieldNote={passwordFieldNote}
           stateToChange={(e) => setPassword(e.target.value)}
+          autoComplete={"off"}
+          showNote={passwordFocus && !validPassword ? true : false}
+          onFocus={() => setPasswordFocus(true)}
+          onBlur={() => setPasswordFocus(false)}
         />
         <Input
           label="Confirm Password"
           fieldPlaceholder={"Comfirm your password"}
           type="password"
-          textClass="text-muted"
+          isValid={validMatch && password}
+          isInvalid={matchPassword && !validMatch}
           isRequired={true}
           controlId="registerConfirmPasswordInput"
           fieldNote={confirmPasswordFieldNote}
           stateToChange={(e) => setMatchPassword(e.target.value)}
+          autoComplete={"off"}
+          showNote={matchFocus && !validMatch ? true : false}
+          onFocus={() => setMatchFocus(true)}
+          onBlur={() => setMatchFocus(false)}
         />
       </>
     </section>

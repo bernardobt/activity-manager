@@ -1,44 +1,31 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/esm/Container";
 import Form from "react-bootstrap/Form";
 import Register from "./Register";
 import SignIn from "./SignIn";
 
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}/;
-const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
-/*  HAVE TO VALIDATE USERNAME AND PASSWORD THINGY 
-      DO Something about a sucess or error message on register
-  
-  */
-
 const Auth = () => {
-  //  State to show if the user is logged in or not
-  const [isRegistered, setIsRegistered] = useState(true);
+  // Login Successfull
+  const [success, setSucess] = useState(false);
 
-  // State for error on register
-  const [errMessage, setErrMessage] = useState("");
-  const [sucess, setSucess] = useState(false);
+  //  State to choose which form to display
+  const [isRegistered, setIsRegistered] = useState(true);
 
   // States for email field
   const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
 
   // States for user field
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
 
   // States for user password
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(false);
-  const [passwordFocus, setPasswordFocus] = useState(false);
 
   // States for user matching password
   const [matchPassword, setMatchPassword] = useState("");
   const [validMatch, setValidMatch] = useState(false);
-  const [matchFocus, setMatchFocus] = useState(false);
 
   // Switch between register and login forms
   const formTitle = isRegistered ? "Sign In" : "Register";
@@ -49,14 +36,28 @@ const Auth = () => {
     <Register
       email={email}
       setEmail={setEmail}
+      validEmail={validEmail}
+      setValidEmail={setValidEmail}
       user={user}
       setUser={setUser}
+      validName={validName}
+      setValidName={setValidName}
+      password={password}
       setPassword={setPassword}
+      validPassword={validPassword}
+      setValidPassword={setValidPassword}
+      matchPassword={matchPassword}
       setMatchPassword={setMatchPassword}
+      validMatch={validMatch}
+      setValidMatch={setValidMatch}
     />
   );
   const switchForm = () => {
     setIsRegistered((prevIsSignedIn) => !prevIsSignedIn);
+    setEmail("");
+    setUser("");
+    setPassword("");
+    setMatchPassword("");
   };
 
   const handleOnRegister = async (e) => {
@@ -76,45 +77,45 @@ const Auth = () => {
     console.log("password: ", password);
   };
 
-  // Validation of username and password
-  /* Have to make it only in the Register form
-     Make alerts only appear when field is on focus
-  */
-  // validade username
-  useEffect(() => {
-    const result = USER_REGEX.test(user);
-    setValidName(result);
-  }, [user]);
-
-  // validade password
-  useEffect(() => {
-    const result = PASSWORD_REGEX.test(password);
-    setValidPassword(result);
-    const match = password === matchPassword;
-    setValidMatch(match);
-  }, [password, matchPassword]);
-
   const disableRegisterButton =
-    validName && validPassword && validMatch ? false : true;
+    email && validName && validPassword && validMatch ? false : true;
+  const disableSignInButton = user && password ? false : true;
 
   return (
     <Form className="mt-5">
-      {/* <p ref={errRef}>{errMessage}</p> */}
       <h1>{formTitle}</h1>
       {formBody}
 
       <Button
         variant="primary"
+        type="submit"
         onClick={isRegistered ? handleOnSignIn : handleOnRegister}
-        // disabled={!validName || !validPassword || !validMatch ? true : false}
-        disabled={isRegistered ? false : disableRegisterButton}
+        disabled={isRegistered ? disableSignInButton : disableRegisterButton}
       >
         {formSubmitButtonText}
       </Button>
 
-      <Button variant="dark" onClick={switchForm}>
-        Go to {isRegistered ? "Register" : "Sign In"}
-      </Button>
+      <Form.Group>
+        <Form.Text className="text-muted"></Form.Text>
+        {isRegistered ? "Don't have an accout? " : "Already have an accout? "}
+        {isRegistered ? (
+          <a
+            href="#"
+            className="text-decoration-underline text-primary"
+            onClick={switchForm}
+          >
+            <strong>Register</strong>
+          </a>
+        ) : (
+          <a
+            href="#"
+            className="text-decoration-underline text-primary"
+            onClick={switchForm}
+          >
+            <strong>Sign In</strong>
+          </a>
+        )}
+      </Form.Group>
     </Form>
   );
 };
