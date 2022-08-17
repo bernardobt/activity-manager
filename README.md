@@ -11,6 +11,7 @@ A simple list to keep track of progress:
 #### Client
 
 - Boilerplate
+- Form behaviour is set up
 
 #### Server
 
