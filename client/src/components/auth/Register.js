@@ -1,6 +1,5 @@
 import Input from "../layout/FormInput";
 import React, { useState, useRef, useEffect } from "react";
-import Button from "react-bootstrap/esm/Button";
 
 const EMAIL_REGEX = /.*\@[a-zA-Z0-9-_]*\.[a-zA-Z]{3}/;
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}/;
@@ -49,15 +48,6 @@ const Register = ({
     const match = password === matchPassword;
     setValidMatch(match);
   }, [password, matchPassword]);
-
-  const handleOnRegister = async (e) => {
-    e.preventDefault();
-    console.log("clicked Register");
-    console.log("email: ", email);
-    console.log("user: ", user);
-    console.log("password: ", password);
-    console.log("matchPassword: ", matchPassword);
-  };
 
   const emailFieldNote = <>Not a valid email.</>;
   const userNameFieldNote = (
