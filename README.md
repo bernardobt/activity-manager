@@ -11,22 +11,23 @@ A simple list to keep track of progress:
 #### Client
 
 - Boilerplate
-- Form behaviour is set up
+- Form register new user is set up
 
 #### Server
 
 - Boilerplate
-- Simple working API for basic user CRUD
+- User management done
 
 ### To do
 
 #### Client
 
+- Page after login
 - Simple page to get API data and display it
 
 #### Server
 
--
+- Implement authentication and authorization
 
 ## Tech Stack
 
@@ -45,6 +46,7 @@ These are the installed libraries
 - react-router-dom: 6.3.0
 - bootstrap: 5.2.0
 - react-bootstrap: 2.5.0
+- axios: 0.27.2
 
 #### Server
 

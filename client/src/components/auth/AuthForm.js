@@ -87,23 +87,20 @@ const Auth = () => {
           withCredentials: true,
         }
       );
-      // console.log("response.data", response.data);
-      // console.log("response.accessToken", response.accessToken);
-      // console.log("response", JSON.stringify(response));
       setSuccess(true);
       setAlertMessage("Successfully registered!");
       clearFields();
       switchForm();
     } catch (error) {
+      setSuccess(false);
       if (!error?.response) {
         setAlertMessage("No Server Response");
       } else if (error.response?.status === 409) {
-        setAlertMessage("Username taken.");
+        setAlertMessage("Email or Username taken.");
       } else {
         setAlertMessage("Registration Failed");
       }
     }
-    clearFields();
   };
 
   const handleOnSignIn = (e) => {
@@ -115,6 +112,7 @@ const Auth = () => {
 
   const disableRegisterButton =
     email && validName && validPassword && validMatch ? false : true;
+
   const disableSignInButton = user && password ? false : true;
 
   useEffect(() => {
