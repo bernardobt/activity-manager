@@ -5,7 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 /* import routes that will be used */
-import userRoutes from "./routes/users.js";
+import V1UserRouter from "./v1/routes/userRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -24,7 +24,7 @@ app.use(
 
 /* used routes */
 
-app.use("/users", userRoutes);
+app.use("/api/v1/users", V1UserRouter);
 
 const PORT = process.env.PORT;
 
