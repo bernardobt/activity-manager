@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../layout/FormInput";
 
-const SignIn = ({ setUser, setPassword }) => {
+const SignIn = ({ user, setUser, password, setPassword, setAlertMessage }) => {
   const usernameFieldNote = <>Please enter a user.</>;
   const passwordFieldNote = <>Not a valid email.</>;
+
+  // useEffect(() => {
+  //   setAlertMessage("");
+  // }, [user, password]);
 
   return (
     <>
@@ -16,6 +20,7 @@ const SignIn = ({ setUser, setPassword }) => {
         isRequired={true}
         controlId="registerUsernameInput"
         stateToChange={(e) => setUser(e.target.value)}
+        value={user}
       />
       <Input
         label="Password"
@@ -26,6 +31,7 @@ const SignIn = ({ setUser, setPassword }) => {
         isRequired={true}
         controlId="registerPasswordInput"
         stateToChange={(e) => setPassword(e.target.value)}
+        value={password}
       />
     </>
   );

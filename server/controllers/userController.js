@@ -58,3 +58,15 @@ export const updateUser = async (req, res) => {
       .send({ status: "FAILED", data: { error: error?.message || error } });
   }
 };
+
+export const signInUser = async (req, res) => {
+  const { body, params } = req;
+  try {
+    const signingInUser = await userService.signInUser(params.id, body, res);
+    res.status(201).send({ status: "OK", data: signingInUser });
+  } catch (error) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};

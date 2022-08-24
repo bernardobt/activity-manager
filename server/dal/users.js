@@ -1,5 +1,9 @@
 import User from "../models/userModel.js";
 
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+
 const getUsers = async () => {
   try {
     const users = await User.find().exec();
@@ -104,4 +108,51 @@ const updateUser = async (userId, userObject) => {
   }
 };
 
-export default { getUsers, addUser, getUser, deleteUser, updateUser };
+const signInUser = async (userId, userToSingIn, res) => {
+  const userExists = await User.findOne({
+    username: userToSingIn.username,
+  }).exec();
+  if (!userExists)
+    throw {
+      status: 401,
+    };
+
+  if (userToSingIn.password === userExists.password) {
+    const accessToken = jwt.sign(
+      { username: userExists.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "10m" }
+    );
+    const refreshToken = jwt.sign(
+      { username: userExists.username },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    await User.findByIdAndUpdate(
+      userId,
+      { userObject },
+      {
+        new: true,
+      }
+    );
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({ accessToken }).cookie("jwt", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+  } else return res.sendStatus(401);
+};
+
+export default {
+  getUsers,
+  addUser,
+  getUser,
+  deleteUser,
+  updateUser,
+  signInUser,
+};

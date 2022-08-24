@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
 import Form from "react-bootstrap/Form";
@@ -6,15 +7,20 @@ import Alert from "react-bootstrap/Alert";
 import Register from "./Register";
 import SignIn from "./SignIn";
 import axios from "../../api/axios.js";
-import { USERS_URL } from "../../constants/apiUrls.js";
+import { USERS_URL, LOGIN_URL } from "../../constants/apiUrls.js";
 
-const Auth = () => {
+const AuthForm = () => {
+  // Auth context
+  const { setAuth } = useContext(AuthContext);
+
   // Alert Message
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(true);
 
+  // Register Successfull
+  const [successRegister, setSuccessRegister] = useState(false);
   // Login Successfull
-  const [success, setSuccess] = useState(false);
+  const [successLogin, setSuccessLogin] = useState(false);
 
   //  State to choose which form to display
   const [isRegistered, setIsRegistered] = useState(true);
@@ -39,7 +45,13 @@ const Auth = () => {
   const formTitle = isRegistered ? "Sign In" : "Register";
   const formSubmitButtonText = isRegistered ? "Sign In" : "Register";
   const formBody = isRegistered ? (
-    <SignIn setUser={setUser} setPassword={setPassword} />
+    <SignIn
+      user={user}
+      setUser={setUser}
+      password={password}
+      setPassword={setPassword}
+      setAlertMessage={setAlertMessage}
+    />
   ) : (
     <Register
       email={email}
@@ -87,12 +99,12 @@ const Auth = () => {
           withCredentials: true,
         }
       );
-      setSuccess(true);
+      setSuccessRegister(true);
       setAlertMessage("Successfully registered!");
       clearFields();
       switchForm();
     } catch (error) {
-      setSuccess(false);
+      setSuccessRegister(false);
       if (!error?.response) {
         setAlertMessage("No Server Response");
       } else if (error.response?.status === 409) {
@@ -103,11 +115,44 @@ const Auth = () => {
     }
   };
 
-  const handleOnSignIn = (e) => {
+  const handleOnSignIn = async (e) => {
     e.preventDefault();
-    console.log("clicked Sign In");
-    console.log("user: ", user);
-    console.log("password: ", password);
+    // console.log("clicked Sign In");
+    // console.log("user: ", user);
+    // console.log("password: ", password);
+    try {
+      const response = await axios.post(
+        LOGIN_URL,
+        JSON.stringify({ user: user, password: password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log("data: ", JSON.stringify(response?.data));
+      // console.log("data: ", JSON.stringify(response));
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      setAuth({
+        user,
+        password,
+        roles,
+        accessToken,
+      });
+      clearFields();
+      setSuccessLogin(true);
+      console.log("logged in?: ", successLogin);
+    } catch (error) {
+      if (!error?.response) {
+        setAlertMessage("No Server Response");
+      } else if (error.response?.status === 400) {
+        setAlertMessage("Missing Username or Password");
+      } else if (error.response?.status === 401) {
+        setAlertMessage("Unauthorized");
+      } else {
+        setAlertMessage("Login Failed");
+      }
+    }
   };
 
   const disableRegisterButton =
@@ -119,11 +164,15 @@ const Auth = () => {
     alertMessage ? setShowAlert(true) : setShowAlert(false);
   }, [alertMessage]);
 
+  useEffect(() => {
+    setAlertMessage("");
+  }, [user, password]);
+
   return (
     <Container>
       {showAlert && alertMessage && (
         <Alert
-          variant={success ? "success" : "danger"}
+          variant={successRegister ? "success" : "danger"}
           className="mt-3"
           onClose={() => {
             setAlertMessage("");
@@ -176,4 +225,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default AuthForm;

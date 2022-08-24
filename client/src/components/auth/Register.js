@@ -1,5 +1,5 @@
 import Input from "../layout/FormInput";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const EMAIL_REGEX = /.*\@[a-zA-Z0-9-_]*\.[a-zA-Z]{3}/;
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}/;
@@ -85,6 +85,7 @@ const Register = ({
           showNote={emailFocus && !validEmail ? true : false}
           onFocus={() => setEmailFocus(true)}
           onBlur={() => setEmailFocus(false)}
+          value={email}
         />
         <Input
           label="Username"
@@ -100,6 +101,7 @@ const Register = ({
           showNote={userFocus && !validName ? true : false}
           onFocus={() => setUserFocus(true)}
           onBlur={() => setUserFocus(false)}
+          value={user}
         />
         <Input
           label="Password"
@@ -115,6 +117,7 @@ const Register = ({
           showNote={passwordFocus && !validPassword ? true : false}
           onFocus={() => setPasswordFocus(true)}
           onBlur={() => setPasswordFocus(false)}
+          value={password}
         />
         <Input
           label="Confirm Password"
@@ -130,6 +133,7 @@ const Register = ({
           showNote={matchFocus && !validMatch ? true : false}
           onFocus={() => setMatchFocus(true)}
           onBlur={() => setMatchFocus(false)}
+          value={matchPassword}
         />
       </>
     </section>

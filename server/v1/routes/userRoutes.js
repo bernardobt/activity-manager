@@ -7,7 +7,12 @@ import {
   addUser,
   updateUser,
   deleteUser,
+  signInUser,
 } from "../../controllers/userController.js";
+
+// import { signInUser } from "../../controllers/authController.js";
+
+import verifyJWT from "../../middleware/verifyJWT.js";
 
 const router = express.Router();
 
@@ -18,8 +23,10 @@ const router = express.Router();
 // dal interects with db
 router.get("/", getUsers);
 router.post("/", addUser);
-router.get("/:id", getUser);
+router.get("/:id", verifyJWT, getUser);
 router.patch("/:id", updateUser);
 router.delete("/:id", deleteUser);
+
+router.post("/:id/login", signInUser);
 
 export default router;

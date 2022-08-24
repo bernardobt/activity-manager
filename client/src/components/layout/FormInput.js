@@ -18,6 +18,7 @@ const Input = ({
   stateToChange,
   onFocus,
   onBlur,
+  value,
 }) => {
   return (
     <Form.Group className="mb-3" controlId={controlId}>
@@ -33,6 +34,7 @@ const Input = ({
         onBlur={onBlur}
         isValid={isValid}
         isInvalid={isInvalid}
+        value={value}
       />
       <Form.Control.Feedback type="invalid">
         {fieldNote && showNote && onFocus && (

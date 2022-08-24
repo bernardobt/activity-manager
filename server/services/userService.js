@@ -45,10 +45,20 @@ const updateUser = async (userId, userObject) => {
   }
 };
 
+const signInUser = async (userId, userObject, res) => {
+  try {
+    const signedUser = await users.signInUser(userId, userObject, res);
+    return signedUser;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getUsers,
   getUser,
   addUser,
   updateUser,
   deleteUser,
+  signInUser,
 };
