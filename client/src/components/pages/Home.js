@@ -6,6 +6,7 @@ const Home = () => {
   return (
     <Container>
       <h1>This is the Home</h1>
+      <h4>What is this app?</h4>
       <Outlet />
     </Container>
   );

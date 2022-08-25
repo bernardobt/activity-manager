@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import AuthContext from "../../context/AuthProvider";
+// import AuthContext from "../../context/AuthProvider";
+import useAuth from "../../hooks/useAuth";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
 import Form from "react-bootstrap/Form";
@@ -7,14 +8,19 @@ import Alert from "react-bootstrap/Alert";
 import Register from "./Register";
 import SignIn from "./SignIn";
 import axios from "../../api/axios.js";
-import { USERS_URL, LOGIN_URL } from "../../constants/apiUrls.js";
+import { LOGIN_URL, REGISTER_URL } from "../../constants/apiUrls.js";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const AuthForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   // Auth context
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
 
   // Alert Message
-  const [alertMessage, setAlertMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("TEST");
   const [showAlert, setShowAlert] = useState(true);
 
   // Register Successfull
@@ -88,7 +94,7 @@ const AuthForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        USERS_URL,
+        REGISTER_URL,
         JSON.stringify({
           username: user,
           password,
@@ -102,7 +108,7 @@ const AuthForm = () => {
       setSuccessRegister(true);
       setAlertMessage("Successfully registered!");
       clearFields();
-      switchForm();
+      // switchForm();
     } catch (error) {
       setSuccessRegister(false);
       if (!error?.response) {
@@ -123,14 +129,12 @@ const AuthForm = () => {
     try {
       const response = await axios.post(
         LOGIN_URL,
-        JSON.stringify({ user: user, password: password }),
+        JSON.stringify({ username: user, password: password }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
-      console.log("data: ", JSON.stringify(response?.data));
-      // console.log("data: ", JSON.stringify(response));
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       setAuth({
@@ -139,9 +143,10 @@ const AuthForm = () => {
         roles,
         accessToken,
       });
-      clearFields();
-      setSuccessLogin(true);
-      console.log("logged in?: ", successLogin);
+      // setSuccessLogin(true);
+      setAuth({ user, password, accessToken });
+      // clearFields();
+      navigate(from, { replace: true });
     } catch (error) {
       if (!error?.response) {
         setAlertMessage("No Server Response");

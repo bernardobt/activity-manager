@@ -4,4 +4,5 @@ export const CATEGORIES_URL = "/categories";
 export const STATUSES_URL = "/statuses";
 export const USERS_URL = "/users";
 
-export const LOGIN_URL = "/auth";
+export const LOGIN_URL = "/login";
+export const REGISTER_URL = "/register";

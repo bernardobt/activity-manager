@@ -1,14 +1,10 @@
 import React from "react";
 import Container from "react-bootstrap/esm/Container";
 
-const LoggedInPage = ({ isLoggedIn }) => {
+const LoggedInPage = () => {
   return (
     <Container>
-      {isLoggedIn ? (
-        <h1>Logged In Page</h1>
-      ) : (
-        <h1>You've no business here without logging in</h1>
-      )}
+      <h1>Logged In Page</h1>
     </Container>
   );
 };
